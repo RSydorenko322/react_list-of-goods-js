@@ -17,10 +17,10 @@ export const goodsFromServer = [
 ];
 
 function getPrepared(goods, { sortField, reversed }) {
-  const goodsCopy = [...goods];
+  const result = [...goods];
 
   if (sortField) {
-    goodsCopy.sort((a, b) => {
+    result.sort((a, b) => {
       if (sortField === 'alphabetically') {
         return a.localeCompare(b);
       }
@@ -29,11 +29,7 @@ function getPrepared(goods, { sortField, reversed }) {
     });
   }
 
-  if (reversed) {
-    return goodsCopy.reverse();
-  }
-
-  return goodsCopy;
+  return reversed ? result.toReversed() : result;
 }
 
 export const App = () => {
@@ -74,7 +70,7 @@ export const App = () => {
         <button
           type="button"
           className={cn('button is-warning', {
-            'is-light': !reversed
+            'is-light': !reversed,
           })}
           onClick={() => {
             setReversed(!reversed);
@@ -101,7 +97,12 @@ export const App = () => {
 
       <ul>
         {visibleGoods.map(good => (
-          <li data-cy="Good">{good}</li>
+          <li
+            key={good}
+            data-cy="Good"
+          >
+            {good}
+          </li>
         ))}
       </ul>
     </div>
